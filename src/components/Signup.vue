@@ -1,66 +1,70 @@
 <template lang="pug">
-  .signin-container.max-w-sm.m-auto.my-8
+  .max-w-sm.m-auto.my-8
     .border.p-10.border-grey-light.shadow.rounded
       h3.text-2xl.mb-6.text-grey-darkest
-        | Sign In
-      form(@submit.prevent="signin")
+        | Sign Up
+      form(@submit.prevent="signup")
         .text-red(v-if="error")
           | {{ error }}
         .mb-6
           label.label(for="email")
-            | E-mail Address
+            | Email Address
           input.input(type="email" v-model="email" id="email" placeholder="name@domain.com")
         .mb-6
           label.label(for="password")
             | Password
-          input.input(type="password" v-model="password" id="password" placeholder="Password")
+          input.input(type="password" v-model="password" id="password" placeholder="Create Password")
+        .mb-6
+          label.label(for="password_confirmation")
+            | Password Confirmation
+          input.input(type="password" v-model="password_confirmation" id="password_confirmation" placeholder="Confirm Password")
         button.font-sans.font-bold.px-4.rounded.cursor-pointer.no-underline.bg-green.block.w-full.py-4.text-white.items-center.justify-center(type="submit")
-          | Sign In
+          | Sign Up
         .my-4
-          router-link(to="/signup")
-            | Sign up
+          router-link(to="/")
+            | Sign in
 </template>
 
 <script>
 export default {
-  name: 'Signin',
+  name: "Signup",
   data() {
     return {
       email: '',
       password: '',
+      password_confirmation: '',
       error: ''
     }
   },
   created() {
-    this.checkSignedIn()
+    this.checkedSignedIn()
   },
   updated() {
-    this.checkSignedIn()
+    this.checkedSignedIn()
   },
   methods: {
-    signin() {
-      this.$http.plain.post('/signin', { email: this.email, password: this.password })
-        .then(response => this.signinSuccessful(response))
-        .catch(error => this.signinFailed(error))
+    signup() {
+      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
+        .then(response => this.signupSuccessful(response))
+        .catch(error => this.signupFailed(error))
     },
-    signinSuccessful(response) {
+    signupSuccessful(response) {
       if (!response.data.csrf) {
-        this.signinFailed(response)
+        this.signupFailed(response)
         return
       }
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
-      this.error = ''
-      this.$router.replace('records')
+      this.$router.replace('/records')
     },
-    signinFailed(error) {
-      this.error = (error.response && error.response.data && error.response.data.error) || ''
+    signupFailed(error) {
+      this.error = (error.response && error.response.data && error.response.data.error) || 'Something is afoot'
       delete localStorage.csrf
       delete localStorage.signedIn
     },
-    checkSignedIn() {
+    checkedSignedIn() {
       if (localStorage.signedIn) {
-        this.$router.replace('records')
+        this.$router.replace('/records')
       }
     }
   }
