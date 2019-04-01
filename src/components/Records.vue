@@ -61,7 +61,8 @@ export default {
       records: [],
       newRecord: [],
       error: '',
-      editedRecord: ''
+      editedRecord: '',
+      user: ''
     }
   },
   created() {
