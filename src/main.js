@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueAxios from 'vue-axios'
-import { securedAxiosInstance, plainAxiosInstance } from './backend/axios'
+import { securedAxiosInstance, plainAxiosInstance } from './backend/axios/index.js'
 import './main.css'
 
 Vue.config.productionTip = false

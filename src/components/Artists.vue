@@ -42,7 +42,7 @@ export default {
     if (!localStorage.signedIn) {
       this.$router.replace("/")
     } else {
-      this.$http.secured.get('/api/v1/artists')
+      this.$http.secured.get('/api/v1/artists.json')
         .then(response => { this.artists = response.data })
         .catch(error => this.setError(error, "Something is afoot"))
     }
